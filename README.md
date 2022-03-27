@@ -25,6 +25,13 @@ Please note that I tried to optimize every thing I could do (in term of time and
 
 ---------
 
+### Comparison study
+The 'rapport.pdf' contains the report of the comparative study of these different algorithms ***in French***.\
+You can find the different theoretical analyses of complexity (for example the mean time complexity of the QuickSort).\
+The complexities as well as the calculation times are also there (in tables), understandable by all (whatever the language).
+
+---------
+
 ### Test the code
 If you want to test the code (to detect invalid returned values and to show the execution time), simply `make` and `make run`. Make will create 4 tests you can run "by hand" : `test_MedianOfMedians`, `test_QuickSelect`, `test_SelectByHeapsort` and `test_SelectByQuicksort`.
 The MakeFile will compile with `gcc -O3 -march=native -flto` for your specific cpu only, allowing a few more optimization.
