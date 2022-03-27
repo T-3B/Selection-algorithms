@@ -59,8 +59,7 @@ static void quickSort3(int *restrict const array, const size_t first, const size
 }
 
 
-// could not declare args as 'const' since they are not 'const' in the prototype (in 'Select.h')
-int select(int *array, size_t length, size_t k)
+int select(int *restrict const array, const size_t length, const size_t k)
 {
     quickSort3(array, 0, length - 1);
     return array[k];
