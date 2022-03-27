@@ -26,7 +26,7 @@ Please note that I tried to optimize every thing I could do (in term of time and
 ---------
 
 ### Comparison study
-The 'rapport.pdf' contains the report of the comparative study of these different algorithms ***in French***.\
+The 'rapport.pdf' (mainly written by Julien HANSEN) contains the report of the comparative study of these different algorithms ***in French***.\
 You can find the different theoretical analyses of complexity (for example the mean time complexity of the QuickSort).\
 The complexities as well as the calculation times are also there (in tables), understandable by all (whatever the language).
 
