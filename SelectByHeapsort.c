@@ -63,8 +63,7 @@ static void heapSort(int *restrict const array, const size_t length)
 }
 
 
-// could not declare args as 'const' since they are not 'const' in the prototype (in 'Select.h')
-int select(int *array, size_t length, size_t k)
+int select(int *restrict const array, const size_t length, const size_t k)
 {
     heapSort(array, length);
     return array[k];
