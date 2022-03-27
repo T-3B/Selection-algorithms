@@ -20,7 +20,7 @@
  * RETURN
  * q            The k-th smallest element in the array
  * ------------------------------------------------------------------------- */
-int select(int* array, size_t length, size_t k);
+int select(int *restrict const array, const size_t length, const size_t k);
 
 
 #endif // !_SELECT_H_
