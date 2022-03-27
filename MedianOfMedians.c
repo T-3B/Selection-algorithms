@@ -94,8 +94,7 @@ static void selectByMedian(int *restrict const array, const size_t length, const
 }
 
 
-// could not declare args as 'const' since they are not 'const' in the prototype (in 'Select.h')
-int select(int *array, size_t length, size_t k)
+int select(int *restrict const array, const size_t length, const size_t k)
 {
     selectByMedian(array, length, k);
     return array[k];
