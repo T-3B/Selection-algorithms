@@ -5,7 +5,7 @@
 Please note that I tried to optimize every thing I could do (in term of time and space).
 - **QuickSort** (the whole array is sorted then we return the k-th greatest value) :
   - sort the shorter sub-array first (complexity space is then `Θ(log(N))`)
-  - choose a random pivot (really low proability to have the worst complexity time `Θ(N²)`)
+  - choose a random pivot (really low propability to have the worst complexity time `Θ(N²)`)
   - use a three-way partition (runs way faster than two-way partition for arrays with few different values)
 
 
