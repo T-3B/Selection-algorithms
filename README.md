@@ -21,7 +21,7 @@ Please note that I tried to optimize every thing I could do (in term of time and
 
 - **MedianOfMedians** (the whole array will **not** be fully sorted) :\
   Same as QuickSelect, except we compute a better pivot (the median of the medians). Only arrays with length equal (or smaller) to 5 allows to certify that the pivot will be between 30 and 70% of the array. Therefore the worst complexity time is `Θ(N)`.\
-  The implementation here does not use additional arrays to store medians. Each median of a sub-array will be placed at its beginning. To compute the median of the medians, we simply want a factor 5 (= length between 2 medians). Then to compute the median of the medians of the medians, we need to multiply the factor by 5, and so on.
+  The implementation here does not use additional arrays to store medians. Each median of a sub-array will be swapped to the beginning of the "parent" array. We re-apply the same method on those medians until we have only one value left : the median of medians (that will be our pivot value).
 
 ---------
 
@@ -34,7 +34,7 @@ The complexities as well as the calculation times are also there (in tables), un
 
 ### Test the code
 If you want to test the code (to detect invalid returned values and to show the execution time), simply `make` and `make run`. Make will create 4 tests you can run "by hand" : `test_MedianOfMedians`, `test_QuickSelect`, `test_SelectByHeapsort` and `test_SelectByQuicksort`.
-The MakeFile will compile with `gcc -O3 -march=native -flto` for your specific cpu only, allowing a few more optimization.
+The MakeFile will compile with `gcc -O3 -march=native -flto -static` for your specific cpu only, allowing a few more optimizations.
 
 --------
 
