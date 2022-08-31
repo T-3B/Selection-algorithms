@@ -9,7 +9,7 @@ TARGET_QuickSelect = test_QuickSelect
 TARGET_SelectByQuicksort = test_SelectByQuicksort
 
 CC = gcc
-CFLAGS = -g -Wall -Wextra -Wmissing-prototypes --pedantic -std=c99 -O3 -march=native -flto
+CFLAGS = -g -Wall -Wextra -Wmissing-prototypes --pedantic -std=c99 -O3 -march=native -flto -static
 
 .PHONY: all clean run
 
