@@ -1,82 +1,62 @@
 /* ========================================================================= *
- * selectByMedian
- * Implementation of the median of medians selection algorithm
+ * SelectByHeapsort
+ * Implementation of the medianOfMedians algorithm.
+ * The idea behind the code is to compute the median on sub-array of length 5,
+ * then put them at the beginning of the array and reitering.
+ * Therefore the algorithm does not use additional array
+ *   (the only mem used is for function calls stack).
  * By SMAGGHE Clément - https://github.com/T-3B/Selection-algorithms
- * ========================================================================= *
- * Algorithm explanation : divide the array in subArrays of size 5, compute
- * the medians for each subArray and place the medians at its beginning 
- * (= first iteration).
- * Then, multiply the factor by 5 (= the difference between 2 values used to
- * compute the next medians).
- * At the end, the medianOfMedians will be at index [0]. This will be our pivot
- * value, and finally use a threeWayPartition (as quickSort3 does).
- * Repeat the whole process untill k-th value is found.
- * ------------------------------------------------------------------------- */
+ * ========================================================================= */
 
 #include <stddef.h>
 #include "Select.h"
 
 static void swap(int *restrict const a, int *restrict const b);
-static void median(int *restrict const array, const unsigned char length, const size_t factor);
-static void medianOfMedians(int *restrict const array, const size_t length, const size_t factor);
-static void selectByMedian(int *restrict const array, const size_t length, const size_t k);
+static void median(int *restrict const array, const unsigned char length, int *restrict const dest);
+static int medianpivot(int *restrict const array, const size_t length);
 
 
-// `type` *restrict const "name" means : the pointer is const (not the data where it points to), and that its data can only be accessed by it (= restricted access).
-// So restrict optimize the code by only loading *one* time the pointed int values (and not each time the pointers are used)
-static void swap(int *restrict const a, int *restrict const b)
-{
+static void swap(int *restrict const a, int *restrict const b) {
     const int c = *a;
     *a = *b;
     *b = c;
 }
 
-
-// compute the median of the array (of size <= 5) by using the insertion sort, and place the median at index [0]
-static void median(int *restrict const array, const unsigned char length, const size_t factor)
-{
-    size_t i = length * factor;
-    while ((i -= factor)) // if (i == 0) already sorted
-    {
+// compute the median of the array (of size <= 5) by using the insertion sort, and swap the median with dest
+static void median(int *restrict const array, const unsigned char length, int *restrict const dest) {
+    size_t i = length;
+    while (--i) { // if (i == 0) already sorted
         size_t k = i;
         const int val = array[i];
-        while ((k += factor) != length * factor && array[k] < val)
-            array[k - factor] = array[k];
+        while (++k != length && array[k] < val)
+            array[k - 1] = array[k];
         
-        array[k - factor] = val;
+        array[k - 1] = val;
     }
-    swap(array + (length / 2) * factor, array); //swap the median and the first element, no problem if they are the same
+    swap(array + length / 2, dest);
 }
 
+static int medianpivot(int *restrict const array, const size_t length) {
+    size_t m = (length + 4) / 5;
+    
+    for (size_t i = 0; i < length / 5; i++)
+        median(array + 5 * i, 5, array + i);
+    
+    if (length % 5)
+        median(array + 5 * (m - 1), length % 5, array + m - 1);
 
-//the global median will be at index [0]
-static void medianOfMedians(int *restrict const array, const size_t length, const size_t factor)
-{
-    const unsigned char lastSize = length % 5; // size of the last subArray; if == 0 then all subArrays will have size 5
-    const size_t nbrMedians = length / 5 + (_Bool) lastSize; // numbers of subArrays (= nbr of medians to compute)
-    
-    size_t i = nbrMedians;
-    if (lastSize)
-        median(array + --i * 5, lastSize, factor); // compute the median of a subArray of custom size (< 5)
-    
-    while (i--)
-        median(array + i * 5, 5, factor); // compute the median of a subArray of size 5
-    
-    if (nbrMedians > 5)
-        medianOfMedians(array, nbrMedians, factor * 5);
-    else
-        median(array, nbrMedians, factor * 5);
+    return select(array, m, m/2);
 }
 
-
-static void selectByMedian(int *restrict const array, const size_t length, const size_t k)
-{
-    medianOfMedians(array, length, 1);
-    const int pivotVal = array[0];
-    size_t i = 1, pivotLow = 0, pivotHigh = length - 1;
+int select(int *restrict const array, const size_t length, const size_t k) {
+	if (length == 1 && !k)
+        return array[0];
     
-    while (i <= pivotHigh)
-    {
+    const int pivotVal = medianpivot(array, length);
+
+    size_t i = 0, pivotLow = 0, pivotHigh = length - 1;
+    
+    while (i <= pivotHigh) {
         if (array[i] > pivotVal)
             swap(array + i, array + pivotHigh--); // place the value at the end if greater than pivot
         else {
@@ -87,15 +67,9 @@ static void selectByMedian(int *restrict const array, const size_t length, const
     }
     
     if (k < pivotLow)
-        selectByMedian(array, pivotLow, k);
+        return select(array, pivotLow, k);
     else if (k > pivotHigh++ && length > pivotHigh)
-        selectByMedian(array + pivotHigh, length - pivotHigh, k - pivotHigh);
-    // if (pivotLow <= k && k >= pivotHigh) nothing is done, since we found the value we wanted. Recursion will end up normally.
-}
-
-
-int select(int *restrict const array, const size_t length, const size_t k)
-{
-    selectByMedian(array, length, k);
-    return array[k];
+        return select(array + pivotHigh, length - pivotHigh, k - pivotHigh);
+    else
+        return pivotVal;
 }
